@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!-- 页面meta -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>后台管理系统</title>
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+		<script src="../js/jquery.min.js"></script>
+		<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+		<script src="../js/bootstrap.min.js"></script>
+		<!-- angluar -->
+		<script src="../js/angular.js"></script>
+		<script src="../js/angular-route.js"></script>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<!-- 分页组件开始 -->
+		<script src="../js/pagination.js"></script>
+		<link rel="stylesheet" href="../js/pagination.css">
+		<!-- 分页组件结束 -->
+		<style type="text/css">
+			#div1 {
+				width: 1400px;
+				height: 700px;
+				margin: 15px 60px 0 60px;
+				padding: 0px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div ng-app="home" id="div1" class="container">
+			<!-- 页面头部 -->
+			<!-- Logo -->
+			<div class="row">
+				<div class="col-md-3 column bg-info">
+					<h3 class="text-center">管理员 </h3>
+				</div>
+				<div class="col-md-9 column bg-primary">
+					<h3 class="text-center ">自动售货系统</h3>
+				</div>
+			</div>
+			<!-- 页面头部 /-->
+
+			<!-- 导航侧栏 -->
+			<!-- Split button -->
+			<div class="row">
+
+				<div class="col-md-3 column" style="padding:0px; border-radius: 5px;">
+					<div class="panel-group" id="panel-33302">
+						<div class="panel panel-success">
+							<div class="panel-heading ">
+								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-33302" href="#panel-element-461601">
+									<h3 class="text-center ">菜 单</h3>
+								</a>
+							</div>
+							<div id="panel-element-461601" class="panel-collapse collapse">
+								<div class="panel-body">
+									<ul class="nav nav-pills nav-stacked">
+										<li role="presentation" class="active">
+											<a href="#!/">Home</a>
+										</li>
+										<li role="presentation">
+											<a href="#!/mange">Mange</a>
+										</li>
+										<li role="presentation">
+											<a href="#!/">Messages</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 导航侧栏 /-->
+
+				<!-- 内容区域 -->
+				<div class="col-md-9 column" style="padding: 0px;">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="text-center">商品管理</h3>
+						</div>
+						<div ng-view class="panel-body" style="height: 500px;">
+
+						</div>
+					</div>
+				</div>
+				<!-- 内容区域 /-->
+			</div>
+			<!-- 底部导航 -->
+			<div class="row" style="padding: 0px ;border-radius: 5px;font-size: 20px;">
+				<div class="col-md-3">
+					<b>Version</b> 1.0.8
+				</div>
+				<div class="col-md-6">
+					<strong>Copyright &copy; 2014-2017 <a href="#">研究院研发部</a></strong>
+				</div>
+
+				<div class="col-md-3">
+					All rights reserved.
+				</div>
+			</div>
+			<!-- 底部导航 /-->
+		</div>
+
+		<script>
+			var app = angular.module('home', ['ngRoute', 'pagination']);
+			app.config(['$routeProvider', function($routeProvider) {
+					$routeProvider
+						.when('/', {
+							template: '这是首页页面'
+						})
+						.when('/mange', {
+							templateUrl: './mange.html',
+							controller: 'MangeController'
+						})
+						.otherwise({
+							redirectTo: '/'
+						});
+				}])
+				.controller('MangeController', function($scope, $http, $route) {
+
+					$scope.info = "";
+					$scope.arrlist = [];
+					//打开提示框
+					$scope.OpenModelWin = function(Message) {
+						$scope.info = Message;
+						console.log(Message);
+						$('#myModal').modal('show');
+					};
+					//多选和单选
+					$scope.selectOne = function(id, tag) {
+						if(tag) {
+							$scope.arrlist.push(id);
+						} else {
+							for(var i = 0; i < $scope.arrlist.length; i++) {
+								if(id == $scope.arrlist[i]) {
+									$scope.arrlist.splice(i, 1);
+								}
+							}
+						}
+
+						console.log($scope.arrlist);
+					};
+					//全选
+					$scope.selectAll = function(tag) {
+						if(tag) {
+							angular.forEach($scope.list, function(item, index, array) {
+								$scope.arrlist.push(item.goods_id);
+							});
+						} else {
+							$scope.arrlist = [];
+						}
+
+					}
+					//读取列表数据绑定到表单
+					$scope.findAll = function() {
+
+						$http.get('../auto/findAll').then(
+							function(response) {
+								$scope.list = response.data;
+								console.log($scope.list);
+							}
+						);
+					};
+					//增加 /更新
+					$scope.save = function() {
+						var methodName = "add";
+						if($scope.entity.id != null) {
+							console.log($scope.entity.id);
+							methodName = "update"
+						}
+						console.log(methodName);
+						$http.post("../auto/" + methodName + "", $scope.entity).then(
+							function(response) {
+								if(response.status == 200) {
+									console.log(typeof response.data.success);
+									console.log(typeof $scope.info);
+									$scope.OpenModelWin("" + response.data.success);
+								};
+							}
+						).catch();
+
+					}
+					//单查
+					$scope.findOne = function(id) {
+
+						$http.post("../auto/found", id).then(
+							function(response) {
+								$scope.entity = response.data;
+							})
+						$scope.tap_onread = true;
+					};
+					//删除
+					$scope.Delete = function() {
+						if(window.confirm('你确定删除吗？')) {
+
+							$http.post("../auto/delete", $scope.arrlist).then(
+								function(response) {
+									if(response.status == 200) {
+										$scope.OpenModelWin(response.data.success);
+									} else {
+										$scope.OpenModelWin("异常发生！！！");
+									};
+								});
+						}
+
+					}
+					//分页
+					//currentPage：当前页   totalItems：总记录数  itemsPerPage：每页记录数  
+					//perPageOptions：每页显示多少条记录数  onChange：当页码发生变化调用方法
+					$scope.paginationConf = {            
+						currentPage: 1,
+						            totalItems: 10,
+						            itemsPerPage: 10,
+						            perPageOptions: [10, 20, 30, 40, 50],
+						            onChange: function() {               
+							$scope.reloadList();            
+						}         
+					};
+					//刷新列表         
+					$scope.reloadList = function() {
+						$scope.findPage($scope.paginationConf.currentPage,
+							$scope.paginationConf.itemsPerPage);         
+					}                  
+					$scope.findPage = function(page, size) {            
+						$http.post("../auto/findPage", {page,size})
+							.then( 
+								function(response) {                  
+									$scope.list = response.data.rows;    //显示当前页数据	                  
+									$scope.paginationConf.totalItems = response.data.total;    //更新总记录数
+								});                          
+					}
+
+				});
+		</script>
+	</body>
+
+</html>

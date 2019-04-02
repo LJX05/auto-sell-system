@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <title>Bootstrap</title>
+
+        <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+        <script src="js/jquery.min.js"></script>
+        <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+        <script src="js/bootstrap.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="js/angular.js"></script>
+        <!--
+               angualr
+               作者：offline
+               时间：2019-03-14
+               描述：
+        -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            #s1 {
+                margin-top: 13px;
+            }
+
+            #tab1 {
+                margin-bottom: 0px;
+            }
+            .table th, .table td {
+                text-align: center;
+                vertical-align: middle!important;
+            }
+            #div3{
+                height: 550px !important;
+            }
+        </style>
+
+    </head>
+
+    <body ng-app="autosell" ng-controller="auto" ng-init="initScannerModule()" class="bg-success">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h1 class="text-success text-center">自动售货系统</h1>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row  bg-primary">
+                <div class="col-md-2 ">
+                    <h3 class="text-center">商品编号</h3></div>
+                <div class="col-md-2 ">
+                    <h3 class="text-center">商品名称</h3></div>
+                <div class="col-md-2 ">
+                    <h3 class="text-center">商品单价(元)</h3></div>
+                <div class="col-md-2 text-center">
+                    <h3 class="text-center">商品数量</h3></div>
+                <div class="col-md-2 ">
+                    <h3 class="text-center">小计金额：</h3></div>
+                <div class="col-md-2 text-center">
+                    <h3 class="text-center">操作</h3>
+                </div>
+
+            </div>
+
+            <div class="row" id="div3" >
+                <table id="tab1"  class="col-md-12  table table-striped" >
+                    <tbody>
+                        <tr class="row active" height="45px"  ng-repeat="result in results" >
+                            <td class="col-md-2 text-center">{{result.goods_id}}</td>
+                            <td class="col-md-2 text-center"> {{result.goods_name}}</td>
+                            <td id="price" class="col-md-2 text-center">{{result.goods_price}}</td>
+                            <td class="col-md-2 text-center">{{result.num}}</td>
+                            <td class="col-md-2 text-center">{{result.goods_price * result.num}}</td>
+                            <td class="col-md-2"> 
+                                <button  type="button" class="center-block btn btn-primary " data-toggle="modal" data-target="#myModal"  ng-click="dele(result.goods_id)">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="div1" class="row bg-info">
+                <div class="col-md-2">
+                    <h2 class="text-success text-center">总计 :</h2>
+                </div>
+                <div class="col-md-2"><h3 class="text-center" ng-model="sum" >{{sum}}</h3></div>
+                <div class="col-md-6"></div>
+                <div class="col-md-2">
+                    <div id="s1">
+                        <button id="btn_pay" type="button" class="center-block btn  btn-success">确认付款</button>
+                    </div>
+                </div>
+            </div>
+            <div id="div2" class="row clearfix " >
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <h4 class="text-muted text-center">©xinputdjkabdjiah</h4>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title  text-center" id="myModalLabel">温馨提示</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-uppercase text-info text-center "style="font-size: 32px;">请将你不想要到商品放到回收台！<br/>谢谢合作！</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+                    var app = angular.module("autosell", []);
+                    app.controller("auto", function ($scope, $http) {
+                        var list = [];
+                        $scope.sum = 0;
+                        $scope.initScannerModule = function () {
+                            var code = "";
+                            var lastTime, nextTime;
+                            var lastCode, nextCode;
+                            document.onkeypress = function (e) {
+                                nextCode = e.which;
+                                nextTime = new Date().getTime();
+
+                                if (lastCode != null && lastTime != null && nextTime - lastTime <= 30) {
+                                    code += String.fromCharCode(lastCode);
+                                } else if (lastCode != null && lastTime != null && nextTime - lastTime > 100) {
+                                    code = "";
+                                }
+
+                                lastCode = nextCode;
+                                lastTime = nextTime;
+
+
+                            }
+                            window.onkeypress = function (e) {
+                                if (e.which == 13) {
+                                    //2.获取到条形码 code  
+                                    //3.根据条形码处理相关业务
+                                    $http.post('./auto/found', code).then(function (response) {
+                                    	var data =response.data;
+                                        var n = found(list, data.goods_id);
+                                        if (n > -1) {
+                                            list[n].num++;
+                                        } else {
+                                            data.num = 1;
+                                            list.push(data);
+                                        }
+                                        $scope.results = list;
+                                        console.log(list);
+                                        $scope.sum += data.goods_price;
+                                    }).catch(function (response) {
+                                        alert("err!!!");
+                                    });
+                                    code = "";
+                                }
+                            }
+                        }
+                        //删除
+                        $scope.dele = function (de_id) {
+                            var n = found(list, de_id);
+                            if (n > -1) {
+                                $scope.sum -= list[n].goods_price * list[n].num;
+                                list.splice(n, 1);
+                                $scope.results = list;
+                            }
+                        }
+                        //辅助function
+                        function found(list, id) {
+
+                            for (var i = 0; i < list.length; i++) {//遍历数组
+                                if (list[i].goods_id == id) {
+                                    return i;
+                                }
+                            }
+                            return -1;
+                        }
+                    });
+
+                    $("#btn_pay").click(function () {
+                        $(location).prop('href', 'html/pay.html');
+                    });
+        </script>
+    </body>
+
+</html>
