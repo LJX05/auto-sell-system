@@ -12,6 +12,10 @@
         FROM goods
         WHERE goods_id = #{id}
     </select> 
+     <select id="findCount"  resultType="int">
+        SELECT count(1)
+        FROM goods
+    </select>
     <select id="foundAll"  resultMap="goodsResultMap">
         SELECT  goods_id , goods_name,goods_number,goods_price 
         FROM goods

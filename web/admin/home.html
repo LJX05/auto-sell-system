@@ -46,29 +46,25 @@
 			</div>
 			<!-- 页面头部 /-->
 
-			<!-- 导航侧栏 -->
 			<!-- Split button -->
 			<div class="row">
-
+				<!-- 导航侧栏 -->
 				<div class="col-md-3 column" style="padding:0px; border-radius: 5px;">
 					<div class="panel-group" id="panel-33302">
 						<div class="panel panel-success">
 							<div class="panel-heading ">
 								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-33302" href="#panel-element-461601">
-									<h3 class="text-center ">菜 单</h3>
+									<h4 class="text-center ">菜 单</h4>
 								</a>
 							</div>
 							<div id="panel-element-461601" class="panel-collapse collapse">
-								<div class="panel-body">
+								<div class="panel-body" ng-init="l1=ture">
 									<ul class="nav nav-pills nav-stacked">
-										<li role="presentation" class="active">
+										<li role="presentation" ng-class="{active:l1}"  ng-click="l1=true;l2=false">
 											<a href="#!/">Home</a>
 										</li>
-										<li role="presentation">
+										<li role="presentation" ng-class="{active:l2}"  ng-click="l2=true;l1=false">
 											<a href="#!/mange">Mange</a>
-										</li>
-										<li role="presentation">
-											<a href="#!/">Messages</a>
 										</li>
 									</ul>
 								</div>
@@ -82,7 +78,7 @@
 				<div class="col-md-9 column" style="padding: 0px;">
 					<div class="panel panel-success">
 						<div class="panel-heading">
-							<h3 class="text-center">商品管理</h3>
+							<h4 class="text-center">商品管理</h4>
 						</div>
 						<div ng-view class="panel-body" style="height: 500px;">
 
@@ -108,6 +104,7 @@
 		</div>
 
 		<script>
+			
 			var app = angular.module('home', ['ngRoute', 'pagination']);
 			app.config(['$routeProvider', function($routeProvider) {
 					$routeProvider
@@ -177,18 +174,18 @@
 						console.log(methodName);
 						$http.post("../auto/" + methodName + "", $scope.entity).then(
 							function(response) {
-								if(response.status == 200) {
-									console.log(typeof response.data.success);
-									console.log(typeof $scope.info);
-									$scope.OpenModelWin("" + response.data.success);
-								};
+								console.log(typeof response.data.success);
+								console.log(typeof $scope.info);
+								$scope.reloadList(); //重新加载
+								$scope.OpenModelWin("" + response.data.success);
 							}
-						).catch();
+						).catch(function() {
+							$scope.OpenModelWin("异常发生！！！");
+						});  
 
 					}
 					//单查
 					$scope.findOne = function(id) {
-
 						$http.post("../auto/found", id).then(
 							function(response) {
 								$scope.entity = response.data;
@@ -198,27 +195,26 @@
 					//删除
 					$scope.Delete = function() {
 						if(window.confirm('你确定删除吗？')) {
-
 							$http.post("../auto/delete", $scope.arrlist).then(
-								function(response) {
-									if(response.status == 200) {
+									function(response) {
 										$scope.OpenModelWin(response.data.success);
-									} else {
-										$scope.OpenModelWin("异常发生！！！");
-									};
+									}
+								)
+								.catch(function() {
+									$scope.OpenModelWin("异常发生！！！");
 								});
-						}
-
+						} else {}
+						$scope.reloadList(); //重新加载
 					}
 					//分页
 					//currentPage：当前页   totalItems：总记录数  itemsPerPage：每页记录数  
 					//perPageOptions：每页显示多少条记录数  onChange：当页码发生变化调用方法
 					$scope.paginationConf = {            
 						currentPage: 1,
-						            totalItems: 10,
-						            itemsPerPage: 10,
-						            perPageOptions: [10, 20, 30, 40, 50],
-						            onChange: function() {               
+						totalItems: 8,
+						itemsPerPage: 8,
+						perPageOptions: [8, 16, 32, 40, 48],
+						onChange: function() {               
 							$scope.reloadList();            
 						}         
 					};
@@ -228,12 +224,17 @@
 							$scope.paginationConf.itemsPerPage);         
 					}                  
 					$scope.findPage = function(page, size) {            
-						$http.post("../auto/findPage", {page,size})
+						$http.post("../auto/findPage", {
+								page,
+								size
+							})
 							.then( 
 								function(response) {                  
 									$scope.list = response.data.rows;    //显示当前页数据	                  
 									$scope.paginationConf.totalItems = response.data.total;    //更新总记录数
-								});                          
+								}).catch(function() {
+								$scope.OpenModelWin("异常发生！！！");
+							});                          
 					}
 
 				});

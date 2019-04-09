@@ -26,4 +26,6 @@ public interface GoodsMapper {
     public void Delete(String[] ids);
 
     public List<Goods> findPage(@Param("pagenum") int pageNum,@Param("size")  int size);
+
+    public Integer findCount();
 }

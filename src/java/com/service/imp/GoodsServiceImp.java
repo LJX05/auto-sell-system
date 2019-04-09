@@ -18,10 +18,11 @@ import org.springframework.stereotype.Service;
  * @author Michael
  */
 @Service
-public class GoodsServiceImp implements GoodsService{ 
+public class GoodsServiceImp implements GoodsService {
 
     @Autowired
     public GoodsMapper goodsMapper;
+
     @Override
     public Goods FoudById(String id) {
         System.out.println("我进入服务层了");
@@ -30,17 +31,17 @@ public class GoodsServiceImp implements GoodsService{
 
     @Override
     public List<Goods> FoudAll() {
-        return goodsMapper.foundAll(); 
+        return goodsMapper.foundAll();
     }
 
     @Override
     public void AddGoods(Goods goods) {
-      goodsMapper.AddGoods(goods);
+        goodsMapper.AddGoods(goods);
     }
 
     @Override
     public void UpdateGoods(Goods goods) {
-       goodsMapper.Update(goods);
+        goodsMapper.Update(goods);
     }
 
     @Override
@@ -51,11 +52,13 @@ public class GoodsServiceImp implements GoodsService{
     @Override
     public PageResult findPage(int pageNum, int size) {
         //第1页就是 0 ，10  ; 2页  size+1, size
-        List<Goods>Goodses = goodsMapper.findPage(pageNum-1,size);
-       
-        PageResult pageResult = new PageResult(10,Goodses);
-        
+        System.out.println(pageNum);
+        List<Goods> Goodses = goodsMapper.findPage((pageNum-1)*size, size);
+        Integer total = goodsMapper.findCount();                
+      
+        PageResult pageResult = new PageResult(total, Goodses);
+
         return pageResult;
     }
-    
+
 }
