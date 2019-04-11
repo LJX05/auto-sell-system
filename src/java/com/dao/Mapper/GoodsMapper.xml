@@ -18,7 +18,7 @@
     </select>
     <select id="foundAll"  resultMap="goodsResultMap">
         SELECT  goods_id , goods_name,goods_number,goods_price 
-        FROM goods
+        FROM goods 
     </select> 
     <select id="findPage"   resultMap="goodsResultMap">
         SELECT * FROM goods limit #{pagenum},#{size}
