@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.Mapper.PayorderMapper" >
+    <insert id="insertOrder" parameterType="Payorder">
+        insert into
+        payorder(order_id,create_time,Amount,status )
+        values(#{order_id},#{create_time},#{amount},#{status})
+    </insert>
+    <select id="selectAmount"   resultType="java.math.BigDecimal" >
+        select Amount from payorder where order_id = #{orderId}  
+    </select>
+    <!-- 批量插入itme -->
+    <insert id ="insertItmeBatch" parameterType="java.util.List" >
+ 
+        insert into orderitem
+        (item_count, item_Amount, goods_id, order_id)
+        values
+        <foreach collection ="list" item="orderItme" index= "index" separator =",">
+            (
+            #{orderItme.item_count},#{orderItme.item_amount},#{orderItme.goods_id},#{orderItme.order_id}
+            )
+        </foreach >
+    </insert >
+    <update  id ="updatOrderStatus" >
+        update payorder set status=1 where order_id = #{orderId};
+    </update>
+    
+</mapper>

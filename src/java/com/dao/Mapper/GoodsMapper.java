@@ -19,11 +19,11 @@ public interface GoodsMapper {
 
     List<Goods> foundAll();
 
-    void AddGoods(Goods goods);
+    void addGoods(Goods goods);
 
-    public void Update(Goods goods);
+    public void update(Goods goods);
 
-    public void Delete(String[] ids);
+    public void delete(String[] ids);
 
     public List<Goods> findPage(@Param("pagenum") int pageNum,@Param("size")  int size);
 

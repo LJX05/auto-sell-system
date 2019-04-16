@@ -89,14 +89,14 @@
 			</div>
 			<!-- 底部导航 -->
 			<div class="row" style="padding: 0px ;border-radius: 5px;font-size: 20px;">
-				<div class="col-md-3">
-					<b>Version</b> 1.0.8
+				<div class="col-md-2 text-center">
+					<b>Version</b> 1.1.8
 				</div>
-				<div class="col-md-6">
-					<strong>Copyright &copy; 2014-2017 <a href="#">研究院研发部</a></strong>
+				<div class="col-md-5 text-center">
+					<strong>Copyright &copy;2018.12-2019.04 <a href="#">西柚研发部</a></strong>
 				</div>
 
-				<div class="col-md-3">
+				<div class="col-md-4 text-center">
 					All rights reserved.
 				</div>
 			</div>
@@ -171,7 +171,9 @@
 							console.log($scope.entity.id);
 							methodName = "update"
 						}
-						console.log(methodName);
+						console.log(typeof $scope.entity.goods_price);
+						console.log($scope.entity.goods_price);
+						console.log(1111);
 						$http.post("../auto/" + methodName + "", $scope.entity).then(
 							function(response) {
 								console.log(typeof response.data.success);

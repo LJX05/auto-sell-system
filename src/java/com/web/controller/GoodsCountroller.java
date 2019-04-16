@@ -31,22 +31,22 @@ public class GoodsCountroller {
 
     @ResponseBody
     @RequestMapping(value = "/found", method = RequestMethod.POST)
-    public Goods FoudById(@RequestBody String id) {
+    public Goods foudById(@RequestBody String id) {
         System.out.println("我成功了" + id);
-        return goodsService.FoudById(id);
+        return goodsService.foudById(id);
     }
 
     @ResponseBody
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    public List<Goods> FoudAll() {
-        List<Goods> foudAll = goodsService.FoudAll();
+    public List<Goods> foudAll() {
+        List<Goods> foudAll = goodsService.foudAll();
         return foudAll;
     }
 
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Message Add(@RequestBody Goods goods) {
-        goodsService.AddGoods(goods);
+    public Message add(@RequestBody Goods goods) {
+        goodsService.addGoods(goods);
         Message message = new Message();
         message.setSuccess("添加成功！！！");
         return message;
@@ -54,10 +54,10 @@ public class GoodsCountroller {
 
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Message Update(@RequestBody Goods goods) {
+    public Message update(@RequestBody Goods goods) {
         System.out.println(goods);
         System.out.println("Update()");
-        goodsService.UpdateGoods(goods);
+        goodsService.updateGoods(goods);
         Message message = new Message();
         message.setSuccess("修改成功！！！");
         return message;
@@ -66,8 +66,8 @@ public class GoodsCountroller {
 
     @ResponseBody
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Message  Delete(@RequestBody String[] ids) {
-        goodsService.DeleteGoods(ids);
+    public Message  delete(@RequestBody String[] ids) {
+        goodsService.deleteGoods(ids);
         Message message = new Message();
         message.setSuccess("删除成功！！！");
         return message;

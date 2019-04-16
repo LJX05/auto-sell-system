@@ -15,15 +15,15 @@ import java.util.List;
  */
 public interface GoodsService {
 
-    public Goods FoudById(String id);
+    public Goods foudById(String id);
 
-    public List<Goods> FoudAll();
+    public List<Goods> foudAll();
 
-    public void AddGoods(Goods goods);
+    public void addGoods(Goods goods);
 
-    public void UpdateGoods(Goods goods);
+    public void updateGoods(Goods goods);
 
-    public void DeleteGoods(String[] ids);
+    public void deleteGoods(String[] ids);
 
     public PageResult findPage(int page, int size);
     

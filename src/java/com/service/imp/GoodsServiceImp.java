@@ -24,29 +24,29 @@ public class GoodsServiceImp implements GoodsService {
     public GoodsMapper goodsMapper;
 
     @Override
-    public Goods FoudById(String id) {
+    public Goods foudById(String id) {
         System.out.println("我进入服务层了");
         return goodsMapper.selectGoods(id);
     }
 
     @Override
-    public List<Goods> FoudAll() {
+    public List<Goods> foudAll() {
         return goodsMapper.foundAll();
     }
 
     @Override
-    public void AddGoods(Goods goods) {
-        goodsMapper.AddGoods(goods);
+    public void addGoods(Goods goods) {
+        goodsMapper.addGoods(goods);
     }
 
     @Override
-    public void UpdateGoods(Goods goods) {
-        goodsMapper.Update(goods);
+    public void updateGoods(Goods goods) {
+        goodsMapper.update(goods);
     }
 
     @Override
-    public void DeleteGoods(String[] ids) {
-        goodsMapper.Delete(ids);
+    public void deleteGoods(String[] ids) {
+        goodsMapper.delete(ids);
     }
 
     @Override

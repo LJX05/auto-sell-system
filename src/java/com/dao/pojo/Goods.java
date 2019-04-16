@@ -5,17 +5,28 @@
  */
 package com.dao.pojo;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  *
  * @author Michael
  */
-public class Goods {
+public class Goods implements Serializable {
 
+   
     private Integer id;
+  
     private String goods_name;
-    private Integer goods_number;
-    private Float goods_price;
+   
+    private int goods_number;
+   
+    private BigDecimal goods_price;
+ 
     private String goods_id;
+    
+    private List<Orderitem> orderitems;
 
     public Integer getId() {
         return id;
@@ -33,19 +44,19 @@ public class Goods {
         this.goods_name = goods_name;
     }
 
-    public Integer getGoods_number() {
+    public int getGoods_number() {
         return goods_number;
     }
 
-    public void setGoods_number(Integer goods_number) {
+    public void setGoods_number(int goods_number) {
         this.goods_number = goods_number;
     }
 
-    public Float getGoods_price() {
+    public BigDecimal getGoods_price() {
         return goods_price;
     }
 
-    public void setGoods_price(Float goods_price) {
+    public void setGoods_price(BigDecimal goods_price) {
         this.goods_price = goods_price;
     }
 
@@ -57,4 +68,20 @@ public class Goods {
         this.goods_id = goods_id;
     }
 
+    public List<Orderitem> getOrderitems() {
+        return orderitems;
+    }
+
+    public void setOrderitems(List<Orderitem> orderitems) {
+        this.orderitems = orderitems;
+    }
+
+    @Override
+    public String toString() {
+        return "Goods{" + "id=" + id + ", goods_name=" + goods_name + ", goods_number=" + goods_number + ", goods_price=" + goods_price + ", goods_id=" + goods_id + ", orderitems=" + orderitems + '}';
+    }
+    
+
+   
+    
 }
