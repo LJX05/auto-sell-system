@@ -23,9 +23,11 @@ public interface GoodsMapper {
 
     public void update(Goods goods);
 
+    public void updateGoodsNum(@Param("num") int num, @Param("goods_id") String goods_id);
+
     public void delete(String[] ids);
 
-    public List<Goods> findPage(@Param("pagenum") int pageNum,@Param("size")  int size);
+    public List<Goods> findPage(@Param("pagenum") int pageNum, @Param("size") int size);
 
     public Integer findCount();
 }

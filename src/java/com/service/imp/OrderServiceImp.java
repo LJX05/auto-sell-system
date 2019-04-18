@@ -8,8 +8,8 @@ package com.service.imp;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.dao.Mapper.PayorderMapper;
-import com.dao.pojo.Orderitem;
-import com.dao.pojo.Payorder;
+import com.dao.pojo.OrderItem;
+import com.dao.pojo.PayOrder;
 import com.fuzhu.OrderPayCode;
 import com.service.OrderService;
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class OrderServiceImp implements OrderService {
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     @Override
-    public String createPayOrder(Payorder payorder) {
+    public String createPayOrder(PayOrder payorder) {
         try {
             if (payorder.getAmount().compareTo(BigDecimal.ZERO)>0) {
             //创建订单完善信息
@@ -54,7 +54,7 @@ public class OrderServiceImp implements OrderService {
 
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     @Override
-    public boolean addOrderItem(List<Orderitem> orderitems) {
+    public boolean addOrderItem(List<OrderItem> orderitems) {
         try {
             payorderMapper.insertItmeBatch(orderitems);
             return true;

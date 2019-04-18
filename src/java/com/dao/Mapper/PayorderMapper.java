@@ -5,8 +5,8 @@
  */
 package com.dao.Mapper;
 
-import com.dao.pojo.Orderitem;
-import com.dao.pojo.Payorder;
+import com.dao.pojo.OrderItem;
+import com.dao.pojo.PayOrder;
 import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -17,12 +17,14 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface PayorderMapper {
 
-    public void insertOrder(Payorder payorder);
+    public void insertOrder(PayOrder payorder);
 
-    public void insertItmeBatch(List<Orderitem> orderitems);
+    public void insertItmeBatch(List<OrderItem> orderitems);
 
     public void updatOrderStatus(@Param("orderId") String orderId);
 
     public BigDecimal selectAmount(@Param("orderId")String orderId);
     
+    public PayOrder   select(@Param("orderId")String orderId);
+    public PayOrder   selectOrder(@Param("orderId")String orderId);
 }

@@ -6,6 +6,57 @@
         payorder(order_id,create_time,Amount,status )
         values(#{order_id},#{create_time},#{amount},#{status})
     </insert>
+    <resultMap id="payOrderMap"  type="com.dao.pojo.PayOrder"  >
+        <id property="id" column="id"/>
+        <result property="order_id" column="order_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="amount" column="amount"/>
+        <result property="status" column="status"/>
+        <collection property="orderItems" ofType="com.dao.pojo.OrderItem">
+            <id property="id" column="id"/>
+            <result property="item_count" column="item_count"/>
+            <result property="item_amount" column="item_Amount"/>
+            <association property="goods" column="goods_id" javaType="com.dao.pojo.Goods">
+                <id property="id" column="id"/>
+                <result property="goods_name" column="goods_name"/>
+                <result property="goods_number" column="goods_number"/>
+                <result property="goods_price" column="goods_price"/>
+                <result property="goods_id" column="goods_id"/>
+            </association>
+        </collection>
+    </resultMap>
+    <select id="select"   resultMap="payOrderMap" >
+        SELECT
+        *
+        FROM
+        goods,
+        orderitem,
+        payorder 
+        WHERE
+        orderitem.goods_id = goods.goods_id 
+        AND orderitem.order_id = payorder.order_id 
+        AND payorder.order_id = #{orderId}  
+    </select>
+    
+    <select id="selectOrder" resultMap="ClassResultMap4">
+        select * from payorder where order_id = #{orderId} 
+    </select>
+    
+    <resultMap type="com.dao.pojo.PayOrder" id="ClassResultMap4">
+        <id property="id" column="id"/>
+        <result property="order_id" column="order_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="amount" column="amount"/>
+        <result property="status" column="status"/>
+        <collection property="orderItems" ofType="com.dao.pojo.OrderItem" column="{order_id=order_id}" select="getorderItems" >
+        </collection>
+    </resultMap>
+      
+    <select id="getorderItems"  resultType="com.dao.pojo.OrderItem">
+        SELECT *  FROM orderitem WHERE order_id = #{order_id}
+    </select>
+      
+    
     <select id="selectAmount"   resultType="java.math.BigDecimal" >
         select Amount from payorder where order_id = #{orderId}  
     </select>

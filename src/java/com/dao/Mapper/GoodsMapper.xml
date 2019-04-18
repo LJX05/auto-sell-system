@@ -12,7 +12,7 @@
         FROM goods
         WHERE goods_id = #{id}
     </select> 
-     <select id="findCount"  resultType="int">
+    <select id="findCount"  resultType="int">
         SELECT count(1)
         FROM goods
     </select>
@@ -31,15 +31,17 @@
     <update id="update" parameterType="Goods" >
         update goods  set goods_name = #{goods_name},goods_number = #{goods_number},goods_price=#{goods_price} where goods_id=#{goods_id} 
     </update>
-    
+    <update id="updateGoodsNum">
+        update goods set goods_number = goods_number + #{num} where goods_id=#{goods_id} 
+    </update>
     <delete  id="delete" parameterType="java.util.List" >
-<!--        需要传数组时，一般为java.util.List做参数，-->   
+        <!--        需要传数组时，一般为java.util.List做参数，-->   
         <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item 
-	: 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
-	delete from goods where goods_id in
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+        delete from goods where goods_id in
         <foreach collection="array" item="ids" index="no" open="(" separator=","  close=")" >
-	  #{ids}
-	</foreach>        
-      </delete>
+            #{ids}
+        </foreach>        
+    </delete>
 </mapper>
 

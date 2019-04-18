@@ -26,7 +26,7 @@ public class Goods implements Serializable {
  
     private String goods_id;
     
-    private List<Orderitem> orderitems;
+    private List<OrderItem> orderitems;
 
     public Integer getId() {
         return id;
@@ -68,11 +68,11 @@ public class Goods implements Serializable {
         this.goods_id = goods_id;
     }
 
-    public List<Orderitem> getOrderitems() {
+    public List<OrderItem> getOrderitems() {
         return orderitems;
     }
 
-    public void setOrderitems(List<Orderitem> orderitems) {
+    public void setOrderitems(List<OrderItem> orderitems) {
         this.orderitems = orderitems;
     }
 

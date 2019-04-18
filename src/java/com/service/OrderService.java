@@ -5,9 +5,8 @@
  */
 package com.service;
 
-import com.dao.pojo.Orderitem;
-import com.dao.pojo.Payorder;
-import com.fuzhu.OrderPayCode;
+import com.dao.pojo.OrderItem;
+import com.dao.pojo.PayOrder;
 import java.util.List;
 
 /**
@@ -16,9 +15,9 @@ import java.util.List;
  */
 public interface OrderService {
 
-    public String  createPayOrder(Payorder payorder);
+    public String  createPayOrder(PayOrder payorder);
 
-    public boolean addOrderItem(List<Orderitem> orderitems);
+    public boolean addOrderItem(List<OrderItem> orderitems);
 
     
     

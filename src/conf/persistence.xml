@@ -3,10 +3,12 @@
   <persistence-unit name="AutoSellSystemPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.dao.pojo.User</class>
-    <class>com.dao.pojo.Payorder</class>
     <class>com.dao.pojo.Goods</class>
-    <class>com.dao.pojo.Orderitem</class>
     <class>com.dao.pojo.Goods_1</class>
+    <class>com.dao.pojo.PayOrder</class>
+    <class>com.dao.pojo.OrderItem</class>
+    <class>com.dao.pojo.Orderitem_1</class>
+    <class>com.dao.pojo.Payorder_1</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/auto-sell-sys?zeroDateTimeBehavior=convertToNull"/>

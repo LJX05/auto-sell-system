@@ -36,9 +36,9 @@
 		<div ng-app="home" id="div1" class="container">
 			<!-- 页面头部 -->
 			<!-- Logo -->
-			<div class="row">
+			<div class="row" ng-controller="UserController" ng-init="loginUser()">
 				<div class="col-md-3 column bg-info">
-					<h3 class="text-center">管理员 </h3>
+					<h3 class="text-center">管理员 ：{{loginuser}}</h3>
 				</div>
 				<div class="col-md-9 column bg-primary">
 					<h3 class="text-center ">自动售货系统</h3>
@@ -119,6 +119,15 @@
 							redirectTo: '/'
 						});
 				}])
+				.controller('UserController', function($scope, $http){
+					$scope.loginUser=function(){
+						$http.post("../user/loginUser").then(
+							function(response) {   
+								$scope.loginuser=response.data.success;
+							}
+						)
+					}
+				})
 				.controller('MangeController', function($scope, $http, $route) {
 
 					$scope.info = "";
@@ -202,10 +211,17 @@
 										$scope.OpenModelWin(response.data.success);
 									}
 								)
-								.catch(function() {
-									$scope.OpenModelWin("异常发生！！！");
+								.catch(function(response) {
+									if(response.status==403){
+										$scope.OpenModelWin("你的权限不够，无法删除！！！");
+									}else{
+										$scope.OpenModelWin("异常发生！！！");
+									}
+									
 								});
-						} else {}
+						} else {
+							
+						}
 						$scope.reloadList(); //重新加载
 					}
 					//分页

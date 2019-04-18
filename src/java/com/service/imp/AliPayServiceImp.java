@@ -13,9 +13,13 @@ import com.alipay.api.request.AlipayTradePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.dao.Mapper.GoodsMapper;
 import com.dao.Mapper.PayorderMapper;
+import com.dao.pojo.OrderItem;
+import com.dao.pojo.PayOrder;
 import com.fuzhu.OrderPayCode;
 import com.service.AliPayService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,9 @@ public class AliPayServiceImp implements AliPayService {
     @Autowired
     private PayorderMapper payorderMapper;
 
+    @Autowired
+    private GoodsMapper goodsMapper;
+
     @Override
     public String payAndsaveOrder(OrderPayCode orderPayCode, AlipayClient alipayClient) {
 
@@ -38,8 +45,10 @@ public class AliPayServiceImp implements AliPayService {
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         AlipayTradePayModel model = new AlipayTradePayModel();
         request.setBizModel(model);//设置交易请求模块
-        //获得订单参数金额
-        String amount = payorderMapper.selectAmount(orderPayCode.getOrderId()).toString();
+        //获得订单参数
+        PayOrder order = payorderMapper.selectOrder(orderPayCode.getOrderId());
+
+        String amount = order.getAmount().toString();
         System.out.println(amount);
         //请求模块交易参数
         model.setOutTradeNo(orderPayCode.getOrderId());//流水号
@@ -60,6 +69,12 @@ public class AliPayServiceImp implements AliPayService {
                     case "10000":
                         //交易成功
                         payorderMapper.updatOrderStatus(orderPayCode.getOrderId());//更新订单状态
+                        //扣库存
+
+                        List<OrderItem> orderItems = order.getOrderItems();
+                        for (OrderItem orderItem : orderItems) {
+                            goodsMapper.updateGoodsNum(orderItem.getItem_count() * -1, orderItem.getGoods_id());
+                        }
                         return "10000";
                     case "40004":
                         //交易失败
@@ -100,13 +115,19 @@ public class AliPayServiceImp implements AliPayService {
                     Thread.sleep(5000);
                     t--;
                 } else if ("TRADE_SUCCESS".equals(tradeStatus)) {//交易支付成功
-                     //交易成功
+                    //交易成功
                     payorderMapper.updatOrderStatus(orderPayCode.getOrderId());//更新订单状态
+                    //扣库存
+                    PayOrder order = payorderMapper.selectOrder(orderPayCode.getOrderId());
+                    List<OrderItem> orderItems = order.getOrderItems();
+                    for (OrderItem orderItem : orderItems) {
+                        goodsMapper.updateGoodsNum(orderItem.getItem_count() * -1, orderItem.getGoods_id());
+                    }
                     return "Success";
                 } else if ("TRADE_CLOSED".equals(tradeStatus)) {//未付款交易超时关闭，或支付完成后全额退款
                     return "TRADE_CLOSED";
                 } else if ("TRADE_FINISHED".equals(tradeStatus)) {//交易结束，不可退款
-                     return "TRADE_FINISHED";
+                    return "TRADE_FINISHED";
                 }
             }
         } catch (AlipayApiException | InterruptedException ex) {

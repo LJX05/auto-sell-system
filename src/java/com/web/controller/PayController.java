@@ -7,8 +7,8 @@ package com.web.controller;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.dao.pojo.Orderitem;
-import com.dao.pojo.Payorder;
+import com.dao.pojo.OrderItem;
+import com.dao.pojo.PayOrder;
 import com.fuzhu.AppPayConfig;
 import com.fuzhu.Message;
 import com.fuzhu.OrderPayCode;
@@ -37,7 +37,7 @@ public class PayController {
 
     @ResponseBody
     @RequestMapping(value = "/creatOrder ", method = RequestMethod.POST)
-    public Message createPayOrder(@RequestBody Payorder payorder) {
+    public Message createPayOrder(@RequestBody PayOrder payorder) {
         System.out.println(payorder);
         Message message = new Message();
         //返回订单号
@@ -47,7 +47,7 @@ public class PayController {
 
     @ResponseBody
     @RequestMapping(value = "/addOrderItem ", method = RequestMethod.POST)
-    public Message addOrderItem(@RequestBody List<Orderitem> orderitems) {
+    public Message addOrderItem(@RequestBody List<OrderItem> orderitems) {
         boolean ok = orderService.addOrderItem(orderitems);
         Message message = new Message();
         //返回订单号
